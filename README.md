@@ -1,7 +1,5 @@
-# precedencia-y-asociatividad
+## Intérprete de expresiones aritméticas con ANTLR4
 ---
-```markdown
-# Intérprete de expresiones aritméticas con ANTLR4
 
 Este proyecto implementa un **analizador sintáctico e intérprete** para expresiones aritméticas usando **ANTLR4** y **Python 3**.  
 
@@ -9,40 +7,44 @@ Se desarrollaron **dos versiones de la gramática**:
 1. **Asociatividad por izquierda (IZQ)** → lo normal en matemáticas.
 2. **Asociatividad por derecha (DER)** → versión alternativa para observar diferencias.
 
----
-
 ## 📂 Estructura del proyecto
----
+```markdown
 
-
-
+PrecAsoc/
+│── DERC/                   # Versión con asociatividad por izquierda
+│   ├── Expr.g4
+│   ├── ExprLexer.py
+│   ├── ExprParser.py
+│   ├── ExprVisitor.py
+│   ├── ExprListener.py
+│   ├── Expr.tokens
+│   ├── ExprLexer.tokens
+│   └── main.py
+│
+│── IZQU/                   # Versión con asociatividad por derecha
+│   ├── Expr.g4
+│   ├── ExprLexer.py
+│   ├── ExprParser.py
+│   ├── ExprVisitor.py
+│   ├── ExprListener.py
+│   ├── Expr.tokens
+│   ├── ExprLexer.tokens
+│   └── main.py
+│
+└── requirements.txt
 
 ```
-
 ---
 
-## ⚙️ Instalación
+## ⚙️ Instalación entorno virtual 
 
-1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/tu-repo.git
-   cd tu-repo
-````
-
-2. Crear entorno virtual (opcional pero recomendado):
+1. Crear entorno virtual (opcional pero recomendado):
 
    ```bash
    python3 -m venv venv
    source venv/bin/activate   # En Linux/Mac
    venv\Scripts\activate      # En Windows
    ```
-
-3. Instalar dependencias:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
 ---
 
 ## Uso
@@ -128,7 +130,7 @@ WS : [ \t\r\n]+ -> skip ;
 
 ## Ejemplos de prueba
 
-A continuación los ejemplos probados y sus resultados en **IZQ** (normal) y **DER** (asociatividad derecha):
+Se evaluaron las siguientes expresiones en ambas versiones:
 
 | Expresión     | IZQ (normal) | DER (derecha) |
 | ------------- | ------------ | ------------- |
@@ -138,21 +140,37 @@ A continuación los ejemplos probados y sus resultados en **IZQ** (normal) y **D
 | `10-5-2`      | 3            | **7** 🔄      |
 | `20/5/2`      | 2            | **8.0** 🔄    |
 | `(2+3)*(4+5)` | 45           | 45            |
-| `8/(4/2)`     | 4            | **1.0** 🔄    |
-| `7-(3-2)`     | 6            | 2             |
-
-Como se observa, **la precedencia se mantiene igual** (\*/ tienen más fuerza que +-),
-pero la **asociatividad cambia** en operaciones con `-` y `/`.
+| `8/(4/2)`     | 4            | **4** ✅       |
+| `7-(3-2)`     | 6            | **2** 🔄      |
 
 ---
 
-## Autor
+## Observaciones
+
+* La **precedencia** de operadores se conserva en ambas versiones:
+  `*` y `/` tienen más fuerza que `+` y `-`.
+* Lo que cambia es la **asociatividad**:
+
+  * En **IZQ**, operaciones como `10-5-2` se leen de izquierda a derecha: `(10-5)-2 = 3`.
+  * En **DER**, se leen de derecha a izquierda: `10-(5-2) = 7`.
+* El caso más notorio es la división:
+
+  * `20/5/2`
+
+    * IZQ → `(20/5)/2 = 2`
+    * DER → `20/(5/2) = 8.0`.
+
+Esto permite comparar cómo el **árbol sintáctico** cambia dependiendo de la gramática.
+
+---
+
+## 👤 Autor
 
 * **Nombre:** Paula Alejandra
 * **Curso:** Lenguajes de Programación
 * **Tema:** Precedencia y asociatividad en gramáticas ANTLR4
 
 ```
----
 
+---
 
